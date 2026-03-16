@@ -1,0 +1,92 @@
+# Nexus Agent 安全配置
+# 用于定义 Codex 的安全边界和限制
+
+# 安全边界配置
+security:
+  # 允许修改的目录白名单
+  allowedDirectories:
+    - "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+    - "/home/weixing/.openclaw/workspace/nexus-agent/src"
+  
+  # 禁止修改的目录黑名单
+  forbiddenDirectories:
+    - "/etc"
+    - "/usr"
+    - "/bin"
+    - "/sbin"
+    - "/var"
+    - "/root"
+    - "/boot"
+    - "/sys"
+    - "/proc"
+    - "/dev"
+  
+  # 允许的文件扩展名白名单
+  allowedExtensions:
+    - ".ts"
+    - ".js"
+    - ".json"
+    - ".md"
+    - ".yaml"
+    - ".yml"
+    - ".txt"
+    - ".html"
+    - ".css"
+  
+  # 禁止访问的文件模式（敏感文件）
+  forbiddenPatterns:
+    - "*.env"
+    - "*.env.*"
+    - ".env*"
+    - "*.key"
+    - "*.pem"
+    - "*.cert"
+    - "*.password"
+    - "*.secret"
+    - "credentials.json"
+    - "*.credentials"
+    - ".git/config"
+    - ".ssh/*"
+    - "/etc/passwd"
+    - "/etc/shadow"
+    - "/etc/sudoers"
+  
+  # 是否启用安全模式
+  enabled: true
+  
+  # 是否启用沙箱模式
+  sandboxMode: true
+  
+  # 是否记录所有操作
+  logOperations: true
+
+# 沙箱限制配置
+sandbox:
+  # 禁止执行危险命令
+  forbidDangerousCommands: true
+  
+  # 禁止删除文件
+  forbidDelete:
+    enabled: true
+    exceptions: []  # 可添加例外
+    
+  # 禁止修改系统文件
+  forbidSystemFiles: true
+  
+  # 禁止网络请求（可选）
+  restrictNetwork: false
+
+# 日志配置
+logging:
+  # 日志目录
+  dir: "./logs/security"
+  # 日志级别
+  level: "info"
+  # 是否启用操作审计
+  auditEnabled: true
+  # 保留天数
+  retentionDays: 30
+  # 是否启用回滚功能
+  rollbackEnabled: true
+  # 最大回滚版本数
+  maxRollbackVersions: 10

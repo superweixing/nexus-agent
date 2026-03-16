@@ -1,0 +1,66 @@
+# Nexus Agent 默认配置
+# 用于所有环境的通用配置
+
+# OpenClaw 相关配置
+openclaw:
+  # OpenClaw 路径
+  path: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  # 是否自动安装
+  autoInstall: true
+  # 健康检查间隔（毫秒）
+  healthCheckInterval: 30000
+  # 自动重启失败
+  autoRestart: true
+
+# Codex 相关配置
+codex:
+  # Codex 路径
+  openclawPath: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  # 是否自动安装
+  autoInstall: true
+  # Codex 版本
+  version: "latest"
+
+# 进化循环配置
+evolution:
+  # 获取 Issue 间隔（毫秒）
+  fetchInterval: 3600000  # 1小时
+  # 最大并发数
+  maxConcurrent: 1
+  # 最小重要性（0-1）
+  minImportance: 0.5
+  # 最大难度（0-1）
+  maxDifficulty: 0.7
+  # 是否自动执行（谨慎使用）
+  autoExecute: false
+  # 排除的标签
+  excludeLabels:
+    - "wontfix"
+    - "duplicate"
+    - "invalid"
+    - "low-priority"
+
+# 通知配置
+notification:
+  # 是否启用通知
+  enabled: true
+  # 通知类型
+  types:
+    - "startup"
+    - "shutdown"
+    - "error"
+    - "evolution"
+
+# 日志配置
+logging:
+  # 日志级别: debug, info, warn, error
+  level: "info"
+  # 日志目录
+  dir: "./logs"
+  # 日志文件最大大小（MB）
+  maxSize: 10
+  # 保留天数
+  maxDays: 7
+
+# 运行环境
+env: "default"

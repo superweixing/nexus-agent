@@ -1,0 +1,92 @@
+# Nexus Agent 错误处理配置
+# 
+# 此配置文件定义错误处理、重试机制和优雅降级策略
+
+## 错误分类
+# - NETWORK: 网络连接错误
+# - API: API 调用错误（包含速率限制）
+# - CODE: 代码执行错误
+# - PERMISSION: 权限错误
+# - TIMEOUT: 超时错误
+# - UNKNOWN: 未知错误
+
+## 重试配置
+retry:
+  # 最大重试次数
+  maxRetries: 3
+  
+  # 初始延迟（毫秒）
+  initialDelayMs: 1000
+  
+  # 最大延迟（毫秒）
+  maxDelayMs: 30000
+  
+  # 退避乘数（指数退避）
+  backoffMultiplier: 2
+  
+  # 可重试的错误类型
+  retryableErrors:
+    - NETWORK
+    - API
+    - TIMEOUT
+
+## 优雅降级策略
+degradation:
+  # LLM 失败时回退到规则引擎
+  llm:
+    enabled: true
+    fallbackToRules: true
+  
+  # GitHub API 失败时使用缓存
+  github:
+    enabled: true
+    cacheTTL: 3600  # 缓存时间（秒）
+    fallbackToCache: true
+  
+  # Codex 失败时跳过修改
+  codex:
+    enabled: true
+    skipOnFailure: true
+
+## 错误日志配置
+logging:
+  # 日志文件路径
+  logFilePath: "./logs/nexus-error.log"
+  
+  # 是否启用控制台输出
+  consoleOutput: true
+  
+  # 是否启用文件输出
+  fileOutput: true
+  
+  # 最小上报严重级别
+  minSeverity: "HIGH"  # LOW | MEDIUM | HIGH | CRITICAL
+  
+  # 错误保留天数
+  retentionDays: 30
+  
+  # 飞书 Webhook（可选，用于严重错误通知）
+  # feishuWebhook: "https://open.feishu.cn/open-apis/bot/v2/hook/xxx"
+
+## 错误严重级别定义
+severity:
+  LOW:
+    # 不影响主流程的错误
+    - TIMEOUT
+    - 网络瞬时错误
+  
+  MEDIUM:
+    # 需要关注但不影响核心功能
+    - NETWORK
+    - API (4xx)
+  
+  HIGH:
+    # 需要立即处理
+    - API (5xx)
+    - CODE
+    - PERMISSION
+  
+  CRITICAL:
+    # 系统不可用
+    - 连续重试失败
+    - 致命错误
