@@ -1,0 +1,5 @@
+node_modules/
+openclaw/
+*.log
+.env
+dist/

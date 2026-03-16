@@ -1,0 +1,68 @@
+# Nexus Agent Docker Compose 配置
+version: '3.8'
+
+services:
+  # Nexus Agent 主服务
+  nexus-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-agent
+    env_file:
+      - .env.docker
+    environment:
+      - NODE_ENV=production
+      - NEXUS_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      # 挂载配置目录
+      - ./configs:/app/configs:ro
+      # 挂载日志目录
+      - ./logs:/app/logs
+      # 挂载 OpenClaw 数据
+      - nexus-openclaw-data:/app/openclaw
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - nexus-network
+
+  # Redis 缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - nexus-network
+
+  # 可选：使用外部 OpenClaw 服务
+  # openclaw-external:
+  #   external: true
+  #   name: openclaw_network
+
+volumes:
+  nexus-openclaw-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  nexus-network:
+    driver: bridge

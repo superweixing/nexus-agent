@@ -1,0 +1,47 @@
+# Nexus Agent 开发环境配置
+# 用于开发环境的配置
+
+# OpenClaw 相关配置
+openclaw:
+  path: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  autoInstall: true
+  healthCheckInterval: 15000  # 开发环境15秒检查一次
+  autoRestart: true
+
+# Codex 相关配置
+codex:
+  openclawPath: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  autoInstall: true
+  version: "latest"
+
+# 进化循环配置
+evolution:
+  fetchInterval: 300000  # 开发环境5分钟检查一次
+  maxConcurrent: 2
+  minImportance: 0.3  # 开发环境降低阈值
+  maxDifficulty: 0.9
+  autoExecute: true  # 开发环境可以开启自动执行测试
+  excludeLabels:
+    - "wontfix"
+    - "duplicate"
+    - "invalid"
+
+# 通知配置
+notification:
+  enabled: true
+  types:
+    - "startup"
+    - "shutdown"
+    - "error"
+    - "evolution"
+    - "debug"
+
+# 日志配置
+logging:
+  level: "debug"  # 开发环境详细日志
+  dir: "./logs"
+  maxSize: 5
+  maxDays: 3
+
+# 运行环境
+env: "development"

@@ -1,0 +1,56 @@
+# Nexus Agent .dockerignore
+
+# Node.js
+node_modules
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# 日志
+logs
+*.log
+
+# 开发文件
+.git
+.gitignore
+*.md
+*.tsbuildinfo
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# 临时文件
+.tmp
+.temp
+.DS_Store
+
+# 测试
+coverage
+.nyc_output
+
+# OpenClaw 数据（运行时挂载）
+openclaw
+.nexus-agent.pid
+
+# 构建产物
+dist
+build
+*.tgz
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# 环境文件
+.env
+.env.*
+!.env.docker
+
+# CI
+.github
+.gitlab-ci.yml
+.travis.yml

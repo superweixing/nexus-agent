@@ -1,0 +1,49 @@
+# Nexus Agent 生产环境配置
+# 用于生产环境的配置
+
+# OpenClaw 相关配置
+openclaw:
+  path: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  autoInstall: true
+  healthCheckInterval: 60000  # 生产环境1分钟检查一次
+  autoRestart: true
+
+# Codex 相关配置
+codex:
+  openclawPath: "/home/weixing/.openclaw/workspace/nexus-agent/openclaw"
+  autoInstall: true
+  version: "latest"
+
+# 进化循环配置
+evolution:
+  fetchInterval: 1800000  # 生产环境30分钟检查一次
+  maxConcurrent: 1
+  minImportance: 0.7  # 生产环境提高阈值
+  maxDifficulty: 0.8
+  autoExecute: false  # 生产环境始终关闭自动执行
+  excludeLabels:
+    - "wontfix"
+    - "duplicate"
+    - "invalid"
+    - "low-priority"
+    - "enhancement"
+
+# 通知配置
+notification:
+  enabled: true
+  types:
+    - "startup"
+    - "shutdown"
+    - "error"
+    - "evolution"
+    - "critical"
+
+# 日志配置
+logging:
+  level: "warn"  # 生产环境只记录警告和错误
+  dir: "./logs"
+  maxSize: 50
+  maxDays: 30
+
+# 运行环境
+env: "production"
